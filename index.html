@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olympic Chat - Emax Studios</title>
+    <style>
+        :root { 
+            --oly-blue: #0081C8; --oly-green: #00A651;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+        }
+
+        body { 
+            font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; 
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            overflow: hidden; 
+        }
+        
+        #side { 
+            width: 170px; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255,255,255,0.4); padding: 15px; 
+            display: flex; flex-direction: column; z-index: 10;
+        }
+
+        .btn { 
+            cursor: pointer; padding: 12px; border: 1px solid rgba(255,255,255,0.8); 
+            background: white; margin-bottom: 12px; border-radius: 15px; 
+            font-size: 13px; font-weight: bold; text-align: center; 
+            transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-active { background: var(--oly-blue); color: white; border: none; }
+        .btn-sponsor { background: rgba(255, 255, 255, 0.8); color: var(--oly-green); border: 2px solid var(--oly-green); }
+
+        #main { flex: 1; display: flex; flex-direction: column; position: relative; }
+
+        .head { 
+            text-align: center; padding: 15px; background: rgba(255,255,255,0.2); 
+            backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+        .head img { height: 40px; }
+
+        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; }
+
+        .m { 
+            max-width: 80%; padding: 12px 18px; border-radius: 22px; font-size: 14.5px; 
+            line-height: 1.5; margin-bottom: 15px; animation: pop 0.4s ease-out;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        
+        .ai { background: white; align-self: flex-start; border-bottom-left-radius: 4px; color: #333; }
+        .user { background: var(--oly-blue); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+
+        .in-bar { 
+            padding: 20px; display: flex; background: rgba(255, 255, 255, 0.3); 
+            backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.3);
+        }
+        input { 
+            flex: 1; padding: 14px 22px; border-radius: 30px; border: none; 
+            outline: none; background: white; font-size: 14px;
+        }
+        .send-btn { 
+            background: var(--oly-blue); color: white; border: none; width: 45px; 
+            height: 45px; border-radius: 50%; margin-left: 12px; cursor: pointer;
+        }
+
+        #sponsor-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.2); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center; z-index: 100;
+        }
+        .sponsor-box {
+            background: white; width: 85%; max-width: 450px; padding: 30px; 
+            border-radius: 30px; text-align: center;
+        }
+        .sponsor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px; }
+        .s-item { padding: 15px; border-radius: 20px; background: #f8f9fa; cursor: pointer; }
+
+        .credits { margin-top: auto; text-align: center; padding-bottom: 10px; }
+        .c-main { font-size: 11px; font-weight: bold; color: #444; }
+        .c-sub { font-size: 9px; color: #888; margin-top: 2px; }
+    </style>
+</head>
+<body>
+
+<div id="side">
+    <div class="btn btn-active">Olympic Chat</div>
+    <div class="btn btn-sponsor" onclick="openSponsors()">Sponsor 2026</div>
+    
+    <div class="credits">
+        <div class="c-main">By Emax Studios Official</div>
+        <div class="c-sub">Idea di Max Gaming Labs</div>
+    </div>
+</div>
+
+<div id="main">
+    <div id="sponsor-overlay" onclick="this.style.display='none'">
+        <div class="sponsor-box" onclick="event.stopPropagation()">
+            <h3 style="margin:0;">Partner Ufficiali</h3>
+            <div class="sponsor-grid" id="s-grid"></div>
+        </div>
+    </div>
+
+    <div class="head"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Olympic_rings_without_rims.svg/1024px-Olympic_rings_without_rims.svg.png"></div>
+
+    <div id="chat">
+        <div class="m ai">Ciao! Benvenuto in <b>Olympic Chat</b>. Chiedimi del 2002, del 2026 o degli sponsor! ✨</div>
+    </div>
+
+    <div class="in-bar">
+        <input type="text" id="input" placeholder="Chiedi a Olympic AI..." onkeypress="if(event.key==='Enter') talk()">
+        <button class="send-btn" onclick="talk()">➤</button>
+    </div>
+</div>
+
+<script>
+    const brain = {
+        "biasion": "Biasion dice che la matematica è un opinione! 📐❌",
+        "ciao": "Ciao! Come posso aiutarti oggi con le Olimpiadi? ✨",
+        "oggi": "<b>Live 18 Febbraio 2026:</b><br>⛷️ Sci Alpino: Slalom a Bormio.<br>🏒 Hockey: Semifinale Italia-Canada.<br>⛸️ Pattinaggio: Finali a Milano.",
+        
+        // DATE STORICHE
+        "2026": "<b>Milano Cortina 2026:</b> Sono i Giochi attuali! Oggi è il 18 Febbraio e l'atmosfera è magica tra le Alpi e Milano. ❄️",
+        "2024": "<b>Parigi 2024:</b> Olimpiadi estive. L'Italia ha chiuso con 40 medaglie complessive! 🏅",
+        "2022": "<b>Pechino 2022:</b> Giochi invernali in Cina. L'Italia ha brillato con 17 medaglie totali. 🇨🇳",
+        "2020": "<b>Tokyo 2020:</b> Edizione storica con il record italiano di 40 medaglie totali e l'incredibile oro di Jacobs nei 100m. 🇮🇹",
+        "2006": "<b>Torino 2006:</b> Una delle edizioni invernali più belle, giocata in casa nostra! 🏔️",
+        "2004": "<b>Atene 2004:</b> Il ritorno dei Giochi nella loro culla originaria. 🇬🇷",
+        "2002": "<b>Salt Lake City 2002:</b> Giochi invernali indimenticabili! L'Italia conquistò 13 medaglie, tra cui gli ori di Daniela Ceccarelli e Stefania Belmondo. 🇺🇸",
+        
+        // SPORT
+        "sci alpino": "<b>Sci Alpino:</b> Include Slalom e Discesa. Si gareggia sulla pista Stelvio a Bormio e a Cortina. ⛷️",
+        "sci alpinismo": "<b>Sci Alpinismo:</b> La grande novità di Milano Cortina 2026! 🧗‍♂️",
+        "curling": "<b>Curling:</b> Sport di precisione su ghiaccio, le gare sono a Cortina d'Ampezzo. 🥌",
+        "hockey": "<b>Hockey su Ghiaccio:</b> Sport veloce e fisico, le finali sono al PalaItalia di Milano. 🏒",
+        "pattinaggio": "<b>Pattinaggio:</b> Figura e Short Track illuminano il Forum di Milano e Bormio. ⛸️",
+        "biathlon": "<b>Biathlon:</b> Sci di fondo e tiro ad Anterselva. 🎯",
+        
+        // SPONSOR
+        "samsung": "<b>Samsung:</b> Partner tecnologico. Gli atleti hanno il Galaxy Z Flip7 Olympic Edition! 📱",
+        "armani": "<b>Armani:</b> Firma lo stile dell'Italia Team con le divise EA7. 🇮🇹",
+        "eni": "<b>Eni:</b> Supporta i Giochi con energia sostenibile. 🌿",
+        "tim": "<b>TIM:</b> Fornisce la connettività 5G per i Giochi. 🌐",
+        "visa": "<b>Visa:</b> Partner unico per i pagamenti ufficiali. 💳",
+        "poste": "<b>Poste Italiane:</b> Partner logistico ufficiale. 📦"
+    };
+
+    function talk(forced) {
+        const i = document.getElementById('input');
+        const c = document.getElementById('chat');
+        const val = forced || i.value.trim();
+        if(!val) return;
+
+        c.innerHTML += `<div class="m user">${val}</div>`;
+        i.value = "";
+        c.scrollTop = c.scrollHeight;
+
+        setTimeout(() => {
+            let r = "Chiedimi di uno sport, di una data storica (es. 2002) o degli sponsor! ❄️";
+            let t = val.toLowerCase();
+            for(let k in brain) { if(t.includes(k)) r = brain[k]; }
+            c.innerHTML += `<div class="m ai">${r}</div>`;
+            c.scrollTop = c.scrollHeight;
+        }, 500);
+    }
+
+    function openSponsors() {
+        const grid = document.getElementById('s-grid');
+        grid.innerHTML = '';
+        document.getElementById('sponsor-overlay').style.display = 'flex';
+        const sponsors = [{n:'Samsung', d:'samsung.com'}, {n:'Visa', d:'visa.it'}, {n:'TIM', d:'tim.it'}, {n:'Eni', d:'eni.com'}, {n:'Armani', d:'armani.com'}, {n:'Poste', d:'poste.it'}];
+        sponsors.forEach(s => {
+            grid.innerHTML += `<div class="s-item" onclick="document.getElementById('sponsor-overlay').style.display='none'; talk('${s.n}')">
+                <img src="https://www.google.com/s2/favicons?sz=64&domain=${s.d}">
+            </div>`;
+        });
+    }
+</script>
+</body>
+</html>
