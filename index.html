@@ -2,24 +2,32 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Olympic Chat - Emax Studios</title>
     <style>
         :root { 
-            --oly-blue: #0081C8; --oly-green: #00A651;
+            --oly-blue: #0081C8; --oly-yellow: #FCB131; --oly-black: #000000; 
+            --oly-green: #00A651; --oly-red: #EE334E;
             --glass-bg: rgba(255, 255, 255, 0.4);
         }
 
+        /* Reset per evitare scroll indesiderati */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { 
+            width: 100%; height: 100%; margin: 0; padding: 0; 
+            overflow: hidden; position: fixed; 
+        }
+
         body { 
-            font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; 
+            font-family: 'Segoe UI', sans-serif; display: flex;
             background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
-            overflow: hidden; 
         }
         
+        /* Sidebar */
         #side { 
-            width: 170px; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(15px);
+            width: 160px; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(15px);
             border-right: 1px solid rgba(255,255,255,0.4); padding: 15px; 
-            display: flex; flex-direction: column; z-index: 10;
+            display: flex; flex-direction: column; z-index: 10; flex-shrink: 0;
         }
 
         .btn { 
@@ -28,58 +36,77 @@
             font-size: 13px; font-weight: bold; text-align: center; 
             transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        .btn:hover { transform: translateY(-2px); }
         .btn-active { background: var(--oly-blue); color: white; border: none; }
-        .btn-sponsor { background: rgba(255, 255, 255, 0.8); color: var(--oly-green); border: 2px solid var(--oly-green); }
+        .btn-sponsor { color: var(--oly-green); border: 2px solid var(--oly-green); }
 
-        #main { flex: 1; display: flex; flex-direction: column; position: relative; }
+        /* Main Content */
+        #main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100%; }
 
+        /* Header con LOGO CSS */
         .head { 
-            text-align: center; padding: 15px; background: rgba(255,255,255,0.2); 
-            backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.3);
+            padding: 15px; background: rgba(255,255,255,0.2); 
+            backdrop-filter: blur(10px); display: flex; justify-content: center;
         }
-        .head img { height: 40px; }
+        
+        /* Logo Olimpico creato in CSS */
+        .oly-logo-css { display: flex; gap: 4px; align-items: center; justify-content: center; width: 100px; height: 40px; position: relative; }
+        .ring { width: 22px; height: 22px; border: 3px solid; border-radius: 50%; position: absolute; }
+        .r-blue { border-color: var(--oly-blue); left: 10px; top: 0; }
+        .r-black { border-color: var(--oly-black); left: 36px; top: 0; }
+        .r-red { border-color: var(--oly-red); left: 62px; top: 0; }
+        .r-yellow { border-color: var(--oly-yellow); left: 23px; top: 15px; }
+        .r-green { border-color: var(--oly-green); left: 49px; top: 15px; }
 
-        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; }
+        /* Chat */
+        #chat { 
+            flex: 1; overflow-y: auto; padding: 15px; display: flex; 
+            flex-direction: column; -webkit-overflow-scrolling: touch;
+        }
 
         .m { 
-            max-width: 80%; padding: 12px 18px; border-radius: 22px; font-size: 14.5px; 
-            line-height: 1.5; margin-bottom: 15px; animation: pop 0.4s ease-out;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 85%; padding: 12px 16px; border-radius: 20px; font-size: 14px; 
+            line-height: 1.5; margin-bottom: 15px; animation: pop 0.3s ease-out;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); word-wrap: break-word;
         }
-        @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
-        .ai { background: white; align-self: flex-start; border-bottom-left-radius: 4px; color: #333; }
-        .user { background: var(--oly-blue); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; } }
+        .ai { background: white; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .user { background: var(--oly-blue); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
 
+        /* Input area */
         .in-bar { 
-            padding: 20px; display: flex; background: rgba(255, 255, 255, 0.3); 
+            padding: 12px; display: flex; background: rgba(255, 255, 255, 0.3); 
             backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.3);
         }
         input { 
-            flex: 1; padding: 14px 22px; border-radius: 30px; border: none; 
-            outline: none; background: white; font-size: 14px;
+            flex: 1; padding: 12px 18px; border-radius: 25px; border: none; 
+            outline: none; font-size: 16px; /* Evita zoom su iPhone */
         }
         .send-btn { 
-            background: var(--oly-blue); color: white; border: none; width: 45px; 
-            height: 45px; border-radius: 50%; margin-left: 12px; cursor: pointer;
+            background: var(--oly-blue); color: white; border: none; width: 42px; 
+            height: 42px; border-radius: 50%; margin-left: 10px; cursor: pointer; flex-shrink: 0;
         }
 
+        /* Overlay */
         #sponsor-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.2); backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(8px);
             display: none; align-items: center; justify-content: center; z-index: 100;
         }
-        .sponsor-box {
-            background: white; width: 85%; max-width: 450px; padding: 30px; 
-            border-radius: 30px; text-align: center;
-        }
-        .sponsor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px; }
-        .s-item { padding: 15px; border-radius: 20px; background: #f8f9fa; cursor: pointer; }
+        .sponsor-box { background: white; width: 90%; max-width: 400px; padding: 25px; border-radius: 25px; text-align: center; }
+        .sponsor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .s-item { padding: 10px; border-radius: 12px; background: #f8f9fa; cursor: pointer; }
+        .s-item img { width: 30px; }
 
-        .credits { margin-top: auto; text-align: center; padding-bottom: 10px; }
-        .c-main { font-size: 11px; font-weight: bold; color: #444; }
-        .c-sub { font-size: 9px; color: #888; margin-top: 2px; }
+        .credits { margin-top: auto; text-align: center; padding-bottom: 5px; }
+        .c-main { font-size: 10px; font-weight: bold; color: #444; }
+        .c-sub { font-size: 8px; color: #888; }
+
+        /* Responsive Mobile */
+        @media (max-width: 600px) {
+            #side { width: 110px; padding: 10px; }
+            .btn { font-size: 11px; padding: 8px; border-radius: 10px; }
+            .m { font-size: 13px; max-width: 90%; }
+        }
     </style>
 </head>
 <body>
@@ -102,14 +129,22 @@
         </div>
     </div>
 
-    <div class="head"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Olympic_rings_without_rims.svg/1024px-Olympic_rings_without_rims.svg.png"></div>
+    <div class="head">
+        <div class="oly-logo-css">
+            <div class="ring r-blue"></div>
+            <div class="ring r-black"></div>
+            <div class="ring r-red"></div>
+            <div class="ring r-yellow"></div>
+            <div class="ring r-green"></div>
+        </div>
+    </div>
 
     <div id="chat">
-        <div class="m ai">Ciao! Benvenuto in <b>Olympic Chat</b>. Chiedimi del 2002, del 2026 o degli sponsor! ✨</div>
+        <div class="m ai">Ciao! Benvenuto in <b>Olympic Chat</b>. Come posso aiutarti? ✨</div>
     </div>
 
     <div class="in-bar">
-        <input type="text" id="input" placeholder="Chiedi a Olympic AI..." onkeypress="if(event.key==='Enter') talk()">
+        <input type="text" id="input" placeholder="Scrivi..." onkeypress="if(event.key==='Enter') talk()">
         <button class="send-btn" onclick="talk()">➤</button>
     </div>
 </div>
@@ -119,25 +154,19 @@
         "biasion": "Biasion dice che la matematica è un opinione! 📐❌",
         "ciao": "Ciao! Come posso aiutarti oggi con le Olimpiadi? ✨",
         "oggi": "<b>Live 18 Febbraio 2026:</b><br>⛷️ Sci Alpino: Slalom a Bormio.<br>🏒 Hockey: Semifinale Italia-Canada.<br>⛸️ Pattinaggio: Finali a Milano.",
-        
-        // DATE STORICHE
         "2026": "<b>Milano Cortina 2026:</b> Sono i Giochi attuali! Oggi è il 18 Febbraio e l'atmosfera è magica tra le Alpi e Milano. ❄️",
         "2024": "<b>Parigi 2024:</b> Olimpiadi estive. L'Italia ha chiuso con 40 medaglie complessive! 🏅",
-        "2022": "<b>Pechino 2022:</b> Giochi invernali in Cina. L'Italia ha brillato con 17 medaglie totali. 🇨🇳",
-        "2020": "<b>Tokyo 2020:</b> Edizione storica con il record italiano di 40 medaglie totali e l'incredibile oro di Jacobs nei 100m. 🇮🇹",
+        "2022": "<b>Salt Lake City 2002:</b> Giochi invernali indimenticabili! L'Italia conquistò 13 medaglie. 🇺🇸",
+        "2020": "<b>Tokyo 2020:</b> Edizione storica con il record italiano di 40 medaglie totali e l'oro di Jacobs. 🇮🇹",
         "2006": "<b>Torino 2006:</b> Una delle edizioni invernali più belle, giocata in casa nostra! 🏔️",
         "2004": "<b>Atene 2004:</b> Il ritorno dei Giochi nella loro culla originaria. 🇬🇷",
-        "2002": "<b>Salt Lake City 2002:</b> Giochi invernali indimenticabili! L'Italia conquistò 13 medaglie, tra cui gli ori di Daniela Ceccarelli e Stefania Belmondo. 🇺🇸",
-        
-        // SPORT
+        "2002": "<b>Salt Lake City 2002:</b> L'anno degli ori di Daniela Ceccarelli e Stefania Belmondo! 🇺🇸",
         "sci alpino": "<b>Sci Alpino:</b> Include Slalom e Discesa. Si gareggia sulla pista Stelvio a Bormio e a Cortina. ⛷️",
         "sci alpinismo": "<b>Sci Alpinismo:</b> La grande novità di Milano Cortina 2026! 🧗‍♂️",
         "curling": "<b>Curling:</b> Sport di precisione su ghiaccio, le gare sono a Cortina d'Ampezzo. 🥌",
         "hockey": "<b>Hockey su Ghiaccio:</b> Sport veloce e fisico, le finali sono al PalaItalia di Milano. 🏒",
         "pattinaggio": "<b>Pattinaggio:</b> Figura e Short Track illuminano il Forum di Milano e Bormio. ⛸️",
         "biathlon": "<b>Biathlon:</b> Sci di fondo e tiro ad Anterselva. 🎯",
-        
-        // SPONSOR
         "samsung": "<b>Samsung:</b> Partner tecnologico. Gli atleti hanno il Galaxy Z Flip7 Olympic Edition! 📱",
         "armani": "<b>Armani:</b> Firma lo stile dell'Italia Team con le divise EA7. 🇮🇹",
         "eni": "<b>Eni:</b> Supporta i Giochi con energia sostenibile. 🌿",
@@ -151,13 +180,11 @@
         const c = document.getElementById('chat');
         const val = forced || i.value.trim();
         if(!val) return;
-
         c.innerHTML += `<div class="m user">${val}</div>`;
         i.value = "";
         c.scrollTop = c.scrollHeight;
-
         setTimeout(() => {
-            let r = "Chiedimi di uno sport, di una data storica (es. 2002) o degli sponsor! ❄️";
+            let r = "Chiedimi di uno sport, di una data o degli sponsor! ❄️";
             let t = val.toLowerCase();
             for(let k in brain) { if(t.includes(k)) r = brain[k]; }
             c.innerHTML += `<div class="m ai">${r}</div>`;
@@ -166,14 +193,11 @@
     }
 
     function openSponsors() {
-        const grid = document.getElementById('s-grid');
-        grid.innerHTML = '';
+        const grid = document.getElementById('s-grid'); grid.innerHTML = '';
         document.getElementById('sponsor-overlay').style.display = 'flex';
         const sponsors = [{n:'Samsung', d:'samsung.com'}, {n:'Visa', d:'visa.it'}, {n:'TIM', d:'tim.it'}, {n:'Eni', d:'eni.com'}, {n:'Armani', d:'armani.com'}, {n:'Poste', d:'poste.it'}];
         sponsors.forEach(s => {
-            grid.innerHTML += `<div class="s-item" onclick="document.getElementById('sponsor-overlay').style.display='none'; talk('${s.n}')">
-                <img src="https://www.google.com/s2/favicons?sz=64&domain=${s.d}">
-            </div>`;
+            grid.innerHTML += `<div class="s-item" onclick="document.getElementById('sponsor-overlay').style.display='none'; talk('${s.n}')"><img src="https://www.google.com/s2/favicons?sz=64&domain=${s.d}"></div>`;
         });
     }
 </script>
