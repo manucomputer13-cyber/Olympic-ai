@@ -8,47 +8,20 @@
         :root { 
             --oly-blue: #0081C8; --oly-yellow: #FCB131; --oly-black: #000000; 
             --oly-green: #00A651; --oly-red: #EE334E;
-            --glass-bg: rgba(255, 255, 255, 0.4);
         }
 
-        /* Reset per evitare scroll indesiderati */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { 
-            width: 100%; height: 100%; margin: 0; padding: 0; 
-            overflow: hidden; position: fixed; 
-        }
-
-        body { 
-            font-family: 'Segoe UI', sans-serif; display: flex;
-            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
-        }
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; position: fixed; }
+        body { font-family: 'Segoe UI', sans-serif; display: flex; background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%); }
         
-        /* Sidebar */
-        #side { 
-            width: 160px; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(15px);
-            border-right: 1px solid rgba(255,255,255,0.4); padding: 15px; 
-            display: flex; flex-direction: column; z-index: 10; flex-shrink: 0;
-        }
-
-        .btn { 
-            cursor: pointer; padding: 12px; border: 1px solid rgba(255,255,255,0.8); 
-            background: white; margin-bottom: 12px; border-radius: 15px; 
-            font-size: 13px; font-weight: bold; text-align: center; 
-            transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
+        #side { width: 160px; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(15px); border-right: 1px solid rgba(255,255,255,0.4); padding: 15px; display: flex; flex-direction: column; z-index: 10; flex-shrink: 0; }
+        .btn { cursor: pointer; padding: 12px; border: 1px solid rgba(255,255,255,0.8); background: white; margin-bottom: 12px; border-radius: 15px; font-size: 13px; font-weight: bold; text-align: center; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .btn-active { background: var(--oly-blue); color: white; border: none; }
         .btn-sponsor { color: var(--oly-green); border: 2px solid var(--oly-green); }
 
-        /* Main Content */
         #main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100%; }
-
-        /* Header con LOGO CSS */
-        .head { 
-            padding: 15px; background: rgba(255,255,255,0.2); 
-            backdrop-filter: blur(10px); display: flex; justify-content: center;
-        }
+        .head { padding: 15px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); display: flex; justify-content: center; }
         
-        /* Logo Olimpico creato in CSS */
         .oly-logo-css { display: flex; gap: 4px; align-items: center; justify-content: center; width: 100px; height: 40px; position: relative; }
         .ring { width: 22px; height: 22px; border: 3px solid; border-radius: 50%; position: absolute; }
         .r-blue { border-color: var(--oly-blue); left: 10px; top: 0; }
@@ -57,41 +30,28 @@
         .r-yellow { border-color: var(--oly-yellow); left: 23px; top: 15px; }
         .r-green { border-color: var(--oly-green); left: 49px; top: 15px; }
 
-        /* Chat */
-        #chat { 
-            flex: 1; overflow-y: auto; padding: 15px; display: flex; 
-            flex-direction: column; -webkit-overflow-scrolling: touch;
+        #chat { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; -webkit-overflow-scrolling: touch; }
+        .m { max-width: 85%; padding: 12px 16px; border-radius: 20px; font-size: 14px; line-height: 1.5; margin-bottom: 15px; animation: pop 0.3s ease-out; box-shadow: 0 2px 8px rgba(0,0,0,0.05); word-wrap: break-word; background: white; border: 2px solid transparent; }
+        
+        @keyframes olympicGlow {
+            0% { border-color: transparent; }
+            20% { border-color: var(--oly-blue); background: rgba(0, 129, 200, 0.05); }
+            40% { border-color: var(--oly-yellow); }
+            60% { border-color: var(--oly-black); }
+            80% { border-color: var(--oly-green); }
+            95% { border-color: var(--oly-red); }
+            100% { border-color: transparent; background: white; }
         }
+        .glow-msg { animation: olympicGlow 4s ease-in-out !important; }
 
-        .m { 
-            max-width: 85%; padding: 12px 16px; border-radius: 20px; font-size: 14px; 
-            line-height: 1.5; margin-bottom: 15px; animation: pop 0.3s ease-out;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05); word-wrap: break-word;
-        }
-        @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; } }
-        .ai { background: white; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .ai { align-self: flex-start; border-bottom-left-radius: 2px; }
         .user { background: var(--oly-blue); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
 
-        /* Input area */
-        .in-bar { 
-            padding: 12px; display: flex; background: rgba(255, 255, 255, 0.3); 
-            backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.3);
-        }
-        input { 
-            flex: 1; padding: 12px 18px; border-radius: 25px; border: none; 
-            outline: none; font-size: 16px; /* Evita zoom su iPhone */
-        }
-        .send-btn { 
-            background: var(--oly-blue); color: white; border: none; width: 42px; 
-            height: 42px; border-radius: 50%; margin-left: 10px; cursor: pointer; flex-shrink: 0;
-        }
+        .in-bar { padding: 12px; display: flex; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.3); }
+        input { flex: 1; padding: 12px 18px; border-radius: 25px; border: none; outline: none; font-size: 16px; }
+        .send-btn { background: var(--oly-blue); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; margin-left: 10px; cursor: pointer; flex-shrink: 0; }
 
-        /* Overlay */
-        #sponsor-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3); backdrop-filter: blur(8px);
-            display: none; align-items: center; justify-content: center; z-index: 100;
-        }
+        #sponsor-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100; }
         .sponsor-box { background: white; width: 90%; max-width: 400px; padding: 25px; border-radius: 25px; text-align: center; }
         .sponsor-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
         .s-item { padding: 10px; border-radius: 12px; background: #f8f9fa; cursor: pointer; }
@@ -101,12 +61,8 @@
         .c-main { font-size: 10px; font-weight: bold; color: #444; }
         .c-sub { font-size: 8px; color: #888; }
 
-        /* Responsive Mobile */
-        @media (max-width: 600px) {
-            #side { width: 110px; padding: 10px; }
-            .btn { font-size: 11px; padding: 8px; border-radius: 10px; }
-            .m { font-size: 13px; max-width: 90%; }
-        }
+        @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; } }
+        @media (max-width: 600px) { #side { width: 110px; padding: 10px; } .btn { font-size: 11px; padding: 8px; } }
     </style>
 </head>
 <body>
@@ -114,7 +70,6 @@
 <div id="side">
     <div class="btn btn-active">Olympic Chat</div>
     <div class="btn btn-sponsor" onclick="openSponsors()">Sponsor 2026</div>
-    
     <div class="credits">
         <div class="c-main">By Emax Studios Official</div>
         <div class="c-sub">Idea di Max Gaming Labs</div>
@@ -131,17 +86,12 @@
 
     <div class="head">
         <div class="oly-logo-css">
-            <div class="ring r-blue"></div>
-            <div class="ring r-black"></div>
-            <div class="ring r-red"></div>
-            <div class="ring r-yellow"></div>
-            <div class="ring r-green"></div>
+            <div class="ring r-blue"></div><div class="ring r-black"></div><div class="ring r-red"></div>
+            <div class="ring r-yellow"></div><div class="ring r-green"></div>
         </div>
     </div>
 
-    <div id="chat">
-        <div class="m ai">Ciao! Benvenuto in <b>Olympic Chat</b>. Come posso aiutarti? ✨</div>
-    </div>
+    <div id="chat"><div class="m ai">Ciao! Benvenuto in <b>Olympic Chat</b>.</div></div>
 
     <div class="in-bar">
         <input type="text" id="input" placeholder="Scrivi..." onkeypress="if(event.key==='Enter') talk()">
@@ -152,48 +102,74 @@
 <script>
     const brain = {
         "biasion": "Biasion dice che la matematica è un opinione! 📐❌",
+        "matematica": "Come dice il saggio Biasion, la matematica è un'opinione... specialmente nei tempi della discesa libera! 🏎️💨",
         "ciao": "Ciao! Come posso aiutarti oggi con le Olimpiadi? ✨",
         "oggi": "<b>Live 19 Febbraio 2026:</b><br>⛷️ Sci Alpino: Super-G femminile a Cortina.<br>⛸️ Pattinaggio di Figura: Programma libero coppie a Milano.<br>🥌 Curling: Finali per il bronzo maschile e femminile a Cortina.<br>🏒 Hockey: Semifinale maschile USA-Svezia.",
-        "2026": "<b>Milano Cortina 2026:<b>Milano Cortina 2026:</b> I Giochi sono finalmente qui! L'Italia ospita il mondo intero tra le guglie del Duomo di Milano e le vette delle Dolomiti. Siamo nel pieno della competizione: l'entusiasmo è alle stelle e i nostri atleti stanno dando il massimo per il tricolore. È l'edizione più tecnologica e sostenibile di sempre! 🇮🇹❄️",
-        "2024": "<b>Parigi 2024:</b> Olimpiadi estive. L'Italia ha chiuso con 40 medaglie complessive! 🏅",
-        "2022": "<b>Salt Lake City 2002:</b> Giochi invernali indimenticabili! L'Italia conquistò 13 medaglie. 🇺🇸",
-        "2020": "<b>Tokyo 2020:</b> Edizione storica con il record italiano di 40 medaglie totali e l'oro di Jacobs. 🇮🇹",
-        "2006": "<b>Torino 2006:</b> Una delle edizioni invernali più belle, giocata in casa nostra! 🏔️",
-        "2004": "<b>Atene 2004:</b> Il ritorno dei Giochi nella loro culla originaria. 🇬🇷",
+        "2026": "<b>Milano Cortina 2026:</b> I Giochi sono finalmente qui! L'Italia ospita il mondo tra Milano e le Dolomiti. È l'edizione più tecnologica e sostenibile di sempre! 🇮🇹❄️",
+        "sport": "<b>Tutti gli sport di Milano Cortina 2026:</b><br><br><b>Sci:</b> Sci Alpino, Sci di Fondo, Salto con gli Sci, Combinata Nordica, Freestyle, Snowboard e Sci Alpinismo ⛷️<br><b>Ghiaccio:</b> Hockey, Pattinaggio Figura, Speed Skating, Short Track e Curling ⛸️🥌<br><b>Velocità:</b> Bob, Slittino e Skeleton 🧊<br><b>Tiro:</b> Biathlon 🎯",
+        "sci alpino": "<b>Sci Alpino:</b> Le gare si svolgono sulla Stelvio a Bormio e sull'Olympia delle Tofane a Cortina. ⛷️",
+        "sci di fondo": "<b>Sci di Fondo:</b> Le spettacolari gare di resistenza si tengono in Val di Fiemme. ❄️",
+        "salto con gli sci": "<b>Salto con gli Sci:</b> Gli atleti volano dal trampolino Giuseppe Dal Ben a Predazzo. 🦅",
+        "combinata nordica": "<b>Combinata Nordica:</b> Il mix di salto e fondo, con base in Val di Fiemme. 🎿",
+        "freestyle": "<b>Sci Freestyle:</b> Salti ed evoluzioni mozzafiato a Livigno (Mottolino). 🏂",
+        "snowboard": "<b>Snowboard:</b> Gare di Cross, Slalom e Big Air nel park di Livigno. 🏂",
+        "sci alpinismo": "<b>Sci Alpinismo:</b> Al debutto assoluto nel 2026, si corre a Bormio! 🧗‍♂️",
+        "hockey": "<b>Hockey su Ghiaccio:</b> Torneo maschile al PalaItalia e femminile alla Milano Arena. 🏒",
+        "pattinaggio di figura": "<b>Pattinaggio di Figura:</b> Eleganza e salti al Forum di Milano. ⛸️",
+        "speed skating": "<b>Pattinaggio di Velocità:</b> Le gare su pista lunga si tengono a Rho Fiera Milano. ⛸️⚡",
+        "short track": "<b>Short Track:</b> Velocità e sorpassi al limite nel palazzetto di Bormio. ⛸️🌀",
+        "curling": "<b>Curling:</b> Lo sport di precisione nel leggendario Stadio Olimpico del Ghiaccio di Cortina. 🥌",
+        "bob": "<b>Bob:</b> Gare a oltre 130 km/h sulla nuova pista di Cortina d'Ampezzo. 🧊⚡",
+        "slittino": "<b>Slittino:</b> Una sfida contro il tempo sulla pista ghiacciata di Cortina. 🛷",
+        "skeleton": "<b>Skeleton:</b> A testa avanti sul ghiaccio di Cortina per i più coraggiosi! 🧊",
+        "biathlon": "<b>Biathlon:</b> Sci di fondo e tiro al poligono ad Anterselva. 🎯",
+        "2024": "<b>Parigi 2024:</b> Olimpiadi estive francesi. L'Italia ha brillato con 40 medaglie! 🏅",
+        "2022": "<b>Pechino 2022:</b> Giochi invernali in Cina, con le grandi prestazioni di Arianna Fontana. 🇨🇳",
+        "2020": "<b>Tokyo 2020:</b> Record italiano con 40 medaglie e lo storico oro di Jacobs. 🇯🇵",
+        "2018": "<b>Pyeongchang 2018:</b> Giochi invernali in Corea del Sud. 🇰🇷",
+        "2016": "<b>Rio 2016:</b> Le prime Olimpiadi in Sud America. 🇧🇷",
+        "2014": "<b>Sochi 2014:</b> Giochi invernali in Russia. 🇷🇺",
+        "2012": "<b>Londra 2012:</b> Edizione estiva iconica nel Regno Unito. 🇬🇧",
+        "2010": "<b>Vancouver 2010:</b> Giochi invernali in Canada. 🇨🇦",
+        "2008": "<b>Pechino 2008:</b> L'edizione dei record di Phelps e Bolt. 🇨🇳",
+        "2006": "<b>Torino 2006:</b> L'orgoglio italiano sulla neve e sul ghiaccio di casa nostra! 🏔️",
+        "2004": "<b>Atene 2004:</b> I Giochi tornano a casa in Grecia. 🇬🇷",
         "2002": "<b>Salt Lake City 2002:</b> L'anno degli ori di Daniela Ceccarelli e Stefania Belmondo! 🇺🇸",
-        "sci alpino": "<b>Sci Alpino:</b> Include Slalom e Discesa. Si gareggia sulla pista Stelvio a Bormio e a Cortina. ⛷️",
-        "sci alpinismo": "<b>Sci Alpinismo:</b> La grande novità di Milano Cortina 2026! 🧗‍♂️",
-        "curling": "<b>Curling:</b> Sport di precisione su ghiaccio, le gare sono a Cortina d'Ampezzo. 🥌",
-        "hockey": "<b>Hockey su Ghiaccio:</b> Sport veloce e fisico, le finali sono al PalaItalia di Milano. 🏒",
-        "pattinaggio": "<b>Pattinaggio:</b> Figura e Short Track illuminano il Forum di Milano e Bormio. ⛸️",
-        "biathlon": "<b>Biathlon:</b> Sci di fondo e tiro ad Anterselva. 🎯",
-        "samsung": "<b>Samsung:</b> Partner tecnologico. Gli atleti hanno il Galaxy Z Flip7 Olympic Edition! 📱",
-        "armani": "<b>Armani:</b> Firma lo stile dell'Italia Team con le divise EA7. 🇮🇹",
-        "eni": "<b>Eni:</b> Supporta i Giochi con energia sostenibile. 🌿",
-        "tim": "<b>TIM:</b> Fornisce la connettività 5G per i Giochi. 🌐",
-        "visa": "<b>Visa:</b> Partner unico per i pagamenti ufficiali. 💳",
-        "poste": "<b>Poste Italiane:</b> Partner logistico ufficiale. 📦"
+        "milano": "A Milano si gioca l'Hockey al PalaItalia e il Pattinaggio al Forum. 🏙️⛸️",
+        "cortina": "Cortina ospita lo Sci femminile, il Curling e le piste di Bob e Slittino. 🏔️❄️",
+        "bormio": "Bormio ospita lo Sci maschil e sulla Stelvio e lo Short Track. ⛷️💨",
+        "samsung": "<b>Samsung:</b> Partner tecnologico ufficiale dei Giochi. 📱",
+        "armani": "<b>Armani:</b> Veste l'Italia Team con lo stile EA7. 🇮🇹",
+        "visa": "<b>Visa:</b> Partner ufficiale per i pagamenti. 💳",
+        "tim": "<b>TIM:</b> Partner per le telecomunicazioni. 🌐",
+        "eni": "<b>Eni:</b> Partner per l'energia sostenibile. 🌿",
+        "poste": "<b>Poste Italiane:</b> Partner per i servizi logistici. 📦"
     };
 
     function talk(forced) {
         const i = document.getElementById('input');
         const c = document.getElementById('chat');
-        const val = forced || i.value.trim();
+        let val = forced ? forced : i.value.trim();
         if(!val) return;
+        
         c.innerHTML += `<div class="m user">${val}</div>`;
         i.value = "";
         c.scrollTop = c.scrollHeight;
+        
         setTimeout(() => {
-            let r = "Chiedimi di uno sport, di una data o degli sponsor! ❄️";
+            let r = "Chiedimi di uno sport, di una data o dei luoghi olimpici! ❄️";
             let t = val.toLowerCase();
-            for(let k in brain) { if(t.includes(k)) r = brain[k]; }
-            c.innerHTML += `<div class="m ai">${r}</div>`;
+            for(let k in brain) { if(t.includes(k)) { r = brain[k]; break; } }
+            
+            let glow = (t.includes("2026") || t.includes("milano cortina") || t.includes("oggi")) ? "glow-msg" : "";
+            c.innerHTML += `<div class="m ai ${glow}">${r}</div>`;
             c.scrollTop = c.scrollHeight;
         }, 500);
     }
 
     function openSponsors() {
-        const grid = document.getElementById('s-grid'); grid.innerHTML = '';
+        const grid = document.getElementById('s-grid'); 
+        grid.innerHTML = '';
         document.getElementById('sponsor-overlay').style.display = 'flex';
         const sponsors = [{n:'Samsung', d:'samsung.com'}, {n:'Visa', d:'visa.it'}, {n:'TIM', d:'tim.it'}, {n:'Eni', d:'eni.com'}, {n:'Armani', d:'armani.com'}, {n:'Poste', d:'poste.it'}];
         sponsors.forEach(s => {
